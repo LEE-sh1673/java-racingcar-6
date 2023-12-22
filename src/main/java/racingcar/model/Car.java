@@ -1,33 +1,40 @@
 package racingcar.model;
 
-public class Car {
+class Car implements Comparable<Car> {
 
-    private static final int MIN_FORWARD_SPEED = 4;
+    private final Name name;
 
-    private final CarName name;
+    private Position position;
 
-    private final CarPosition position;
-
-    private Car(final CarName name, final CarPosition position) {
+    private Car(final Name name, final Position position) {
         this.name = name;
         this.position = position;
     }
 
-    public static Car withName(final String name) {
-        return new Car(CarName.valueOf(name), CarPosition.withZero());
+    static Car withName(final String name) {
+        return new Car(Name.create(name), Position.zero());
     }
 
-    public void moveForward(final int speed) {
-        if (speed >= MIN_FORWARD_SPEED) {
-            position.moveForward();
+    void move(final MovingStrategy strategy) {
+        if (strategy.movable()) {
+            position = position.move();
         }
     }
 
-    public String getName() {
+    String getName() {
         return name.getName();
     }
 
-    public int getPosition() {
-        return position.getPosition();
+    Position getPosition() {
+        return position;
+    }
+
+    boolean matchPosition(final Position other) {
+        return position.equals(other);
+    }
+
+    @Override
+    public int compareTo(final Car other) {
+        return this.position.compareTo(other.position);
     }
 }

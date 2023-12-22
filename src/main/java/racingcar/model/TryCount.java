@@ -2,10 +2,12 @@ package racingcar.model;
 
 public class TryCount {
 
+    private static final int ZERO = 0;
+
     private final int count;
 
     private TryCount(final int count) {
-        if (count <= 0) {
+        if (count < ZERO) {
             throw new IllegalArgumentException();
         }
         this.count = count;
@@ -15,7 +17,11 @@ public class TryCount {
         return new TryCount(count);
     }
 
-    public int getValue() {
-        return count;
+    TryCount decrease() {
+        return new TryCount(Math.max(ZERO, count - 1));
+    }
+
+    boolean isZero() {
+        return count == ZERO;
     }
 }

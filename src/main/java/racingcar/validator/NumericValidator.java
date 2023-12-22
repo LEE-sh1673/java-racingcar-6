@@ -1,6 +1,7 @@
 package racingcar.validator;
 
 import java.util.regex.Pattern;
+import org.junit.platform.commons.util.StringUtils;
 
 public class NumericValidator {
 
@@ -12,13 +13,9 @@ public class NumericValidator {
     }
 
     public static void validate(final String stringNumber) {
-        if (isNullOrEmpty(stringNumber) || !isNumeric(stringNumber)) {
+        if (StringUtils.isBlank(stringNumber) || !isNumeric(stringNumber)) {
             throw new IllegalArgumentException();
         }
-    }
-
-    private static boolean isNullOrEmpty(final String stringNumber) {
-        return stringNumber == null || stringNumber.isEmpty();
     }
 
     private static boolean isNumeric(final String stringNumber) {

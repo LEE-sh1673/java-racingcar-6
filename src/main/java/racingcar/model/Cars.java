@@ -1,6 +1,6 @@
 package racingcar.model;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -9,14 +9,9 @@ public class Cars {
 
     private final List<Car> cars;
 
-    private Cars(final String names) {
-        final List<String> carNames = splitNames(names);
-        validateDuplicate(carNames);
-        this.cars = makeCarsWith(carNames);
-    }
-
-    private List<String> splitNames(final String names) {
-        return Arrays.asList(names.split(","));
+    Cars(final List<String> names) {
+        validateDuplicate(names);
+        this.cars = makeCars(names);
     }
 
     private void validateDuplicate(final List<String> names) {
@@ -27,25 +22,32 @@ public class Cars {
         }
     }
 
-    private static List<Car> makeCarsWith(final List<String> carNames) {
+    private List<Car> makeCars(final List<String> carNames) {
         return carNames.stream()
                 .map(Car::withName)
                 .toList();
     }
 
-    public static Cars withNames(final String names) {
+    public static Cars withNames(final List<String> names) {
         return new Cars(names);
     }
 
-    public void moveForward(final CarSpeedGenerator speedGenerator) {
-        for (final Car car : cars) {
-            car.moveForward(speedGenerator.generate());
-        }
+    void move(final MovingStrategy movingStrategy) {
+        cars.forEach(car -> car.move(movingStrategy));
     }
 
-    public List<MoveResult> getResults() {
+    List<Car> findWinners() {
+        final Position maxPosition = getMaxPosition();
         return cars.stream()
-                .map(MoveResult::from)
+                .filter(car -> car.matchPosition(maxPosition))
                 .toList();
+    }
+
+    private Position getMaxPosition() {
+        return Collections.max(cars).getPosition();
+    }
+
+    List<Car> getCars() {
+        return Collections.unmodifiableList(cars);
     }
 }
