@@ -4,16 +4,17 @@ import camp.nextstep.edu.missionutils.Randoms;
 
 public class RandomMovingStrategy implements MovingStrategy {
 
-    private static final int MIN_SPEED = 0;
-    private static final int MAX_SPEED = 9;
-    private static final int THRESHOLD = 4;
+    private static final int MIN_NUMBER = 0;
+    private static final int MAX_NUMBER = 9;
+
+    private static final int MOVABLE_NUMBER = 4;
 
     @Override
     public boolean movable() {
-        return pickNumber() >= THRESHOLD;
+        return pickNumber() >= MOVABLE_NUMBER;
     }
 
     private int pickNumber() {
-        return Randoms.pickNumberInRange(MIN_SPEED, MAX_SPEED);
+        return Randoms.pickNumberInRange(MIN_NUMBER, MAX_NUMBER);
     }
 }

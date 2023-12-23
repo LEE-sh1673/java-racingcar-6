@@ -1,57 +1,78 @@
 package racingcar.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import org.junit.platform.commons.util.StringUtils;
 
-public class Cars {
+class Cars {
+
+    private static final String NAME_SPLITTER = ",";
 
     private final List<Car> cars;
 
     private Cars(final List<Car> cars) {
+        validateDuplicate(cars);
         this.cars = cars;
     }
 
-    public static Cars withNames(final List<String> names) {
-        validateDuplicate(names);
-        return new Cars(makeCars(names));
-    }
+    private void validateDuplicate(final List<Car> cars) {
+        final Set<Car> uniqueCars = new HashSet<>(cars);
 
-    private static void validateDuplicate(final List<String> names) {
-        final Set<String> uniqueNames = new HashSet<>(names);
-        if (names.size() != uniqueNames.size()) {
+        if (cars.size() != uniqueCars.size()) {
             throw new IllegalArgumentException();
         }
     }
 
-    private static List<Car> makeCars(final List<String> carNames) {
-        return carNames.stream()
-            .map(Car::withName)
-            .toList();
+    static Cars withNames(final String carNames) {
+        if (StringUtils.isBlank(carNames)) {
+            throw new IllegalArgumentException("자동차 이름은 값이 존재해야 합니다.");
+        }
+        return new Cars(split(carNames));
+    }
+
+    private static List<Car> split(final String carNames) {
+        return Arrays.stream(carNames.split(NAME_SPLITTER))
+                .map(Car::withName)
+                .toList();
     }
 
     Cars move(final MovingStrategy movingStrategy) {
         final List<Car> moved = new ArrayList<>();
+
         for (final Car car : cars) {
             moved.add(car.move(movingStrategy));
         }
         return new Cars(moved);
     }
 
-    List<Car> findWinners() {
-        final Position maxPosition = getMaxPosition();
-        return cars.stream()
-            .filter(car -> car.matchPosition(maxPosition))
-            .toList();
+    Winners findWinners() {
+        return winners(maxPosition());
     }
 
-    private Position getMaxPosition() {
-        return Collections.max(cars).getPosition();
+    private Position maxPosition() {
+        Position maxPosition = new Position();
+        for (final Car car : cars) {
+            maxPosition = car.max(maxPosition);
+        }
+        return maxPosition;
     }
 
-    List<Car> getCars() {
+    private Winners winners(final Position maxPosition) {
+        final Winners winners = new Winners();
+
+        for (final Car car : cars) {
+            if (car.isWinner(maxPosition)) {
+                winners.addWinner(car);
+            }
+        }
+        return winners;
+    }
+
+    Iterable<Car> cars() {
         return Collections.unmodifiableList(cars);
     }
 }

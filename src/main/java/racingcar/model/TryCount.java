@@ -1,6 +1,6 @@
 package racingcar.model;
 
-public class TryCount {
+class TryCount {
 
     private static final int ZERO = 0;
 
@@ -13,7 +13,7 @@ public class TryCount {
         this.count = count;
     }
 
-    public static TryCount valueOf(final int count) {
+    static TryCount valueOf(final int count) {
         return new TryCount(count);
     }
 

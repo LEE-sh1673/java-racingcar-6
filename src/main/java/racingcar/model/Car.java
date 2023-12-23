@@ -1,9 +1,10 @@
 package racingcar.model;
 
-class Car implements Comparable<Car> {
+import java.util.Objects;
+
+class Car {
 
     private final Name name;
-
     private final Position position;
 
     private Car(final Name name, final Position position) {
@@ -23,19 +24,35 @@ class Car implements Comparable<Car> {
     }
 
     String getName() {
-        return name.getName();
+        return name.name();
     }
 
-    Position getPosition() {
-        return position;
+    int getPosition() {
+        return position.position();
     }
 
-    boolean matchPosition(final Position other) {
+    boolean isWinner(final Position other) {
         return position.equals(other);
     }
 
+    Position max(final Position other) {
+        return position.max(other);
+    }
+
     @Override
-    public int compareTo(final Car other) {
-        return this.position.compareTo(other.position);
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        final Car other = (Car) o;
+        return name.equals(other.name) && position.equals(other.position);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, position);
     }
 }

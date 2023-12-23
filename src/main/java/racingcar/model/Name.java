@@ -1,5 +1,6 @@
 package racingcar.model;
 
+import java.util.Objects;
 import org.junit.platform.commons.util.StringUtils;
 
 class Name {
@@ -22,7 +23,24 @@ class Name {
         return new Name(name);
     }
 
-    String getName() {
+    String name() {
         return name;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        final Name other = (Name) o;
+        return name.equals(other.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
     }
 }

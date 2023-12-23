@@ -17,7 +17,7 @@ public class CarTest {
         Car moved = car.move(() -> false);
 
         // then
-        assertThat(moved.getPosition().intValue()).isEqualTo(0);
+        assertThat(moved.getPosition()).isEqualTo(0);
     }
 
     @Test
@@ -30,6 +30,6 @@ public class CarTest {
         Car moved = car.move(() -> true);
 
         // then
-        assertThat(moved.getPosition().intValue()).isEqualTo(1);
+        assertThat(moved.getPosition()).isEqualTo(1);
     }
 }

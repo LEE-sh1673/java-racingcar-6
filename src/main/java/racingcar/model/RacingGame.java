@@ -1,17 +1,15 @@
 package racingcar.model;
 
-import java.util.List;
-
-import racingcar.model.dto.CarDto;
-import racingcar.model.dto.Winners;
-
 public class RacingGame {
 
     private Cars cars;
-
     private TryCount count;
 
-    public RacingGame(final Cars cars, final TryCount count) {
+    public RacingGame(final String carNames, final int tryCount) {
+        this(Cars.withNames(carNames), TryCount.valueOf(tryCount));
+    }
+
+    RacingGame(final Cars cars, final TryCount count) {
         this.cars = cars;
         this.count = count;
     }
@@ -21,27 +19,20 @@ public class RacingGame {
         count = count.decrease();
     }
 
-    public List<CarDto> getCars() {
-        return cars.getCars().stream()
-            .map(this::toCarDto)
-            .toList();
-    }
+    public RacingResult getResult() {
+        final RacingResult result = new RacingResult();
 
-    private CarDto toCarDto(final Car car) {
-        return new CarDto(car.getName(), car.getPosition().intValue());
+        for (final Car car : cars.cars()) {
+            result.report(car);
+        }
+        return result;
     }
 
     public Winners getWinners() {
-        return new Winners(getNames(cars.findWinners()));
+        return cars.findWinners();
     }
 
-    private List<String> getNames(final List<Car> winners) {
-        return winners.stream()
-            .map(Car::getName)
-            .toList();
-    }
-
-    public boolean isFinish() {
-        return count.isZero();
+    public boolean isRacing() {
+        return !count.isZero();
     }
 }

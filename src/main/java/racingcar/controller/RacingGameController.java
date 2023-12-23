@@ -9,7 +9,6 @@ import racingcar.view.OutputView;
 public class RacingGameController {
 
     private final InputView inputView;
-
     private final OutputView outputView;
 
     public RacingGameController(final InputView inputView, final OutputView outputView) {
@@ -21,9 +20,9 @@ public class RacingGameController {
         final RacingGame game = new RacingGame(inputView.readCars(), inputView.readTryCount());
         final MovingStrategy movingStrategy = new RandomMovingStrategy();
 
-        while (!game.isFinish()) {
+        while (game.isRacing()) {
             game.race(movingStrategy);
-            outputView.printCars(game.getCars());
+            outputView.printResult(game.getResult());
         }
         outputView.printWinners(game.getWinners());
     }

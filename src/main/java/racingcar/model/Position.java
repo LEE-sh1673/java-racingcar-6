@@ -2,11 +2,15 @@ package racingcar.model;
 
 import java.util.Objects;
 
-class Position implements Comparable<Position> {
+class Position {
 
     private static final int INITIAL_POSITION = 0;
 
     private final int position;
+
+    Position() {
+        this(INITIAL_POSITION);
+    }
 
     private Position(final int position) {
         if (position < INITIAL_POSITION) {
@@ -23,7 +27,14 @@ class Position implements Comparable<Position> {
         return new Position(position + 1);
     }
 
-    int intValue() {
+    Position max(final Position other) {
+        if (position > other.position) {
+            return this;
+        }
+        return other;
+    }
+
+    int position() {
         return position;
     }
 
@@ -42,10 +53,5 @@ class Position implements Comparable<Position> {
     @Override
     public int hashCode() {
         return Objects.hash(position);
-    }
-
-    @Override
-    public int compareTo(final Position other) {
-        return position - other.position;
     }
 }
