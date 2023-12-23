@@ -1,5 +1,6 @@
 package racingcar.model;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -9,38 +10,41 @@ public class Cars {
 
     private final List<Car> cars;
 
-    Cars(final List<String> names) {
-        validateDuplicate(names);
-        this.cars = makeCars(names);
+    private Cars(final List<Car> cars) {
+        this.cars = cars;
     }
 
-    private void validateDuplicate(final List<String> names) {
-        final Set<String> uniqueNames = new HashSet<>(names);
+    public static Cars withNames(final List<String> names) {
+        validateDuplicate(names);
+        return new Cars(makeCars(names));
+    }
 
+    private static void validateDuplicate(final List<String> names) {
+        final Set<String> uniqueNames = new HashSet<>(names);
         if (names.size() != uniqueNames.size()) {
             throw new IllegalArgumentException();
         }
     }
 
-    private List<Car> makeCars(final List<String> carNames) {
+    private static List<Car> makeCars(final List<String> carNames) {
         return carNames.stream()
-                .map(Car::withName)
-                .toList();
+            .map(Car::withName)
+            .toList();
     }
 
-    public static Cars withNames(final List<String> names) {
-        return new Cars(names);
-    }
-
-    void move(final MovingStrategy movingStrategy) {
-        cars.forEach(car -> car.move(movingStrategy));
+    Cars move(final MovingStrategy movingStrategy) {
+        final List<Car> moved = new ArrayList<>();
+        for (final Car car : cars) {
+            moved.add(car.move(movingStrategy));
+        }
+        return new Cars(moved);
     }
 
     List<Car> findWinners() {
         final Position maxPosition = getMaxPosition();
         return cars.stream()
-                .filter(car -> car.matchPosition(maxPosition))
-                .toList();
+            .filter(car -> car.matchPosition(maxPosition))
+            .toList();
     }
 
     private Position getMaxPosition() {

@@ -1,14 +1,17 @@
 package racingcar.model;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Stream;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+
+import racingcar.model.dto.CarDto;
+import racingcar.model.dto.Winners;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class RacingGameTest {
 
@@ -21,12 +24,14 @@ public class RacingGameTest {
 
         // when
         racingGame.race(() -> false);
-        RacingResult racingResult = racingGame.getResult();
+        List<CarDto> cars = racingGame.getCars();
 
         // then
-        Map<String, Integer> positions = racingResult.getPositions();
-        assertThat(positions.keySet()).contains(names.toArray(String[]::new));
-        assertThat(positions.values()).containsOnly(0);
+        List<String> carNames = cars.stream().map(CarDto::name).toList();
+        List<Integer> positions = cars.stream().map(CarDto::position).toList();
+
+        assertThat(carNames.containsAll(names)).isTrue();
+        assertThat(positions).containsOnly(0);
     }
 
     @ParameterizedTest
@@ -38,12 +43,14 @@ public class RacingGameTest {
 
         // when
         racingGame.race(() -> true);
-        RacingResult racingResult = racingGame.getResult();
+        List<CarDto> cars = racingGame.getCars();
 
         // then
-        Map<String, Integer> positions = racingResult.getPositions();
-        assertThat(positions.keySet()).containsExactlyInAnyOrder(names.toArray(String[]::new));
-        assertThat(positions.values()).containsOnly(1);
+        List<String> carNames = cars.stream().map(CarDto::name).toList();
+        List<Integer> positions = cars.stream().map(CarDto::position).toList();
+
+        assertThat(carNames.containsAll(names)).isTrue();
+        assertThat(positions).containsOnly(1);
     }
 
     @ParameterizedTest
@@ -56,7 +63,7 @@ public class RacingGameTest {
         // when
         racingGame.race(() -> true);
         Winners winners = racingGame.getWinners();
-        List<String> winnerNames = winners.getNames();
+        List<String> winnerNames = winners.names();
 
         // then
         assertThat(winnerNames.size()).isEqualTo(3);
@@ -65,8 +72,8 @@ public class RacingGameTest {
 
     private static Stream<Arguments> generateCarNames() {
         return Stream.of(
-                Arguments.of(List.of("pobi", "woni", "jun")),
-                Arguments.of(List.of("pribi", "lsh", "woni"))
+            Arguments.of(List.of("pobi", "woni", "jun")),
+            Arguments.of(List.of("pribi", "lsh", "woni"))
         );
     }
 }

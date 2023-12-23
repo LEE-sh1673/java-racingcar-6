@@ -1,8 +1,13 @@
 package racingcar.model;
 
+import java.util.List;
+
+import racingcar.model.dto.CarDto;
+import racingcar.model.dto.Winners;
+
 public class RacingGame {
 
-    private final Cars cars;
+    private Cars cars;
 
     private TryCount count;
 
@@ -12,16 +17,28 @@ public class RacingGame {
     }
 
     public void race(final MovingStrategy movingStrategy) {
-        cars.move(movingStrategy);
+        cars = cars.move(movingStrategy);
         count = count.decrease();
     }
 
-    public RacingResult getResult() {
-        return new RacingResult(cars.getCars());
+    public List<CarDto> getCars() {
+        return cars.getCars().stream()
+            .map(this::toCarDto)
+            .toList();
+    }
+
+    private CarDto toCarDto(final Car car) {
+        return new CarDto(car.getName(), car.getPosition().intValue());
     }
 
     public Winners getWinners() {
-        return new Winners(cars.findWinners());
+        return new Winners(getNames(cars.findWinners()));
+    }
+
+    private List<String> getNames(final List<Car> winners) {
+        return winners.stream()
+            .map(Car::getName)
+            .toList();
     }
 
     public boolean isFinish() {

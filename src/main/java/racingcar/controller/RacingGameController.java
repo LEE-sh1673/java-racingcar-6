@@ -23,7 +23,7 @@ public class RacingGameController {
 
         while (!game.isFinish()) {
             game.race(movingStrategy);
-            outputView.printResult(game.getResult());
+            outputView.printCars(game.getCars());
         }
         outputView.printWinners(game.getWinners());
     }

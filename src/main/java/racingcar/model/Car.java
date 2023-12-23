@@ -4,7 +4,7 @@ class Car implements Comparable<Car> {
 
     private final Name name;
 
-    private Position position;
+    private final Position position;
 
     private Car(final Name name, final Position position) {
         this.name = name;
@@ -15,10 +15,11 @@ class Car implements Comparable<Car> {
         return new Car(Name.create(name), Position.zero());
     }
 
-    void move(final MovingStrategy strategy) {
+    Car move(final MovingStrategy strategy) {
         if (strategy.movable()) {
-            position = position.move();
+            return new Car(name, position.move());
         }
+        return this;
     }
 
     String getName() {
