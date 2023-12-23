@@ -1,7 +1,7 @@
 package racingcar.model;
 
 import java.util.Objects;
-import org.junit.platform.commons.util.StringUtils;
+import racingcar.utils.StringUtils;
 
 class Name {
 

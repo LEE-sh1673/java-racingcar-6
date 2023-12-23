@@ -1,7 +1,7 @@
 package racingcar.validator;
 
 import java.util.regex.Pattern;
-import org.junit.platform.commons.util.StringUtils;
+import racingcar.utils.StringUtils;
 
 public class NumericValidator {
 
