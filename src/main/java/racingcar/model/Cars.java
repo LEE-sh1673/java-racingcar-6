@@ -40,10 +40,13 @@ public class Cars {
     }
 
     Cars move(final MovingStrategy movingStrategy) {
-        final List<Car> moved = cars.stream()
+        return new Cars(moveBy(movingStrategy));
+    }
+
+    private List<Car> moveBy(final MovingStrategy movingStrategy) {
+        return cars.stream()
                 .map(car -> car.move(movingStrategy))
                 .toList();
-        return new Cars(moved);
     }
 
     Winners findWinners() {
