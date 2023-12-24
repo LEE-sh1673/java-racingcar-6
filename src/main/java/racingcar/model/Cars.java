@@ -1,6 +1,5 @@
 package racingcar.model;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -25,16 +24,17 @@ public class Cars {
     }
 
     private static List<Car> split(final String carNames) {
-        final List<Car> cars = Arrays.stream(carNames.split(NAME_SPLITTER))
+        final List<String> splitNames = List.of(carNames.split(NAME_SPLITTER));
+        validateNameDuplicated(splitNames);
+
+        return splitNames.stream()
                 .map(Car::withName)
                 .toList();
-        validateDuplicate(cars);
-        return cars;
     }
 
-    private static void validateDuplicate(final List<Car> cars) {
-        final Set<Car> uniqueCars = new HashSet<>(cars);
-        if (cars.size() != uniqueCars.size()) {
+    private static void validateNameDuplicated(final List<String> names) {
+        final Set<String> uniqueNames = new HashSet<>(names);
+        if (names.size() != uniqueNames.size()) {
             throw new IllegalArgumentException();
         }
     }
