@@ -14,25 +14,20 @@ public class RacingGame {
         this.count = count;
     }
 
+    public boolean isRacing() {
+        return !count.isZero();
+    }
+
     public void race(final MovingStrategy movingStrategy) {
         cars = cars.move(movingStrategy);
         count = count.decrease();
     }
 
-    public RacingResult getResult() {
-        final RacingResult result = new RacingResult();
-
-        for (final Car car : cars.cars()) {
-            result.report(car);
-        }
-        return result;
+    public Cars getCars() {
+        return cars;
     }
 
     public Winners getWinners() {
         return cars.findWinners();
-    }
-
-    public boolean isRacing() {
-        return !count.isZero();
     }
 }

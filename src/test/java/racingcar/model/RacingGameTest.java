@@ -2,6 +2,7 @@ package racingcar.model;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.List;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -19,16 +20,11 @@ public class RacingGameTest {
 
         // when
         racingGame.race(() -> false);
-        final RacingResult racingResult = racingGame.getResult();
+        final Cars cars = racingGame.getCars();
 
         // then
         final Cars stopped = Cars.withNames(names).move(() -> false);
-        final RacingResult expected = new RacingResult();
-
-        for (final Car car : stopped.cars()) {
-            expected.report(car);
-        }
-        assertThat(expected).isEqualTo(racingResult);
+        assertThat(cars.cars()).isEqualTo(stopped.cars());
     }
 
     @ParameterizedTest
@@ -40,16 +36,11 @@ public class RacingGameTest {
 
         // when
         racingGame.race(() -> true);
-        final RacingResult racingResult = racingGame.getResult();
+        final Cars cars = racingGame.getCars();
 
         // then
         final Cars moved = Cars.withNames(names).move(() -> true);
-        final RacingResult expected = new RacingResult();
-
-        for (final Car car : moved.cars()) {
-            expected.report(car);
-        }
-        assertThat(expected).isEqualTo(racingResult);
+        assertThat(cars.cars()).isEqualTo(moved.cars());
     }
 
     @ParameterizedTest
@@ -64,7 +55,8 @@ public class RacingGameTest {
         final Winners winners = racingGame.getWinners();
 
         // then
-        assertThat(winners.names()).isEqualTo(names);
+        final List<String> actual = List.of(names.split(","));
+        assertThat(winners.names()).containsAll(actual);
     }
 
     private static Stream<Arguments> generateCarNames() {

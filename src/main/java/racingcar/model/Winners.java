@@ -3,7 +3,6 @@ package racingcar.model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.StringJoiner;
 
 public class Winners {
 
@@ -21,12 +20,10 @@ public class Winners {
         winners.add(car);
     }
 
-    public String names() {
-        final StringJoiner message = new StringJoiner(",");
-        for (final Car car : winners) {
-            message.add(car.getName());
-        }
-        return message.toString();
+    public Iterable<String> names() {
+        return winners.stream()
+                .map(Car::name)
+                .toList();
     }
 
     @Override

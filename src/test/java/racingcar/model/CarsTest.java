@@ -55,7 +55,7 @@ public class CarsTest {
 
         // then
         for (final Car car : moved.cars()) {
-            assertThat(car.getPosition()).isEqualTo(1);
+            assertThat(car.position()).isEqualTo(1);
         }
     }
 }

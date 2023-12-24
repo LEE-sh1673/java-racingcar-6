@@ -23,7 +23,7 @@ class Name {
         return new Name(name);
     }
 
-    String name() {
+    String getValue() {
         return name;
     }
 

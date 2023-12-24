@@ -12,7 +12,7 @@ class Position {
         this(INITIAL_POSITION);
     }
 
-    private Position(final int position) {
+    Position(final int position) {
         if (position < INITIAL_POSITION) {
             throw new IllegalArgumentException();
         }
@@ -34,7 +34,7 @@ class Position {
         return other;
     }
 
-    int position() {
+    int getValue() {
         return position;
     }
 

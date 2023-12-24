@@ -2,7 +2,7 @@ package racingcar.model;
 
 import java.util.Objects;
 
-class Car {
+public class Car {
 
     private final Name name;
     private final Position position;
@@ -23,20 +23,20 @@ class Car {
         return this;
     }
 
-    String getName() {
-        return name.name();
+    Position max(final Position other) {
+        return position.max(other);
     }
 
-    int getPosition() {
-        return position.position();
-    }
-
-    boolean isWinner(final Position other) {
+    boolean matchPosition(final Position other) {
         return position.equals(other);
     }
 
-    Position max(final Position other) {
-        return position.max(other);
+    public String name() {
+        return name.getValue();
+    }
+
+    public int position() {
+        return position.getValue();
     }
 
     @Override
