@@ -1,10 +1,11 @@
 package racingcar.model;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import org.junit.platform.commons.util.StringUtils;
+
+import racingcar.utils.StringUtils;
 
 public class Cars {
 
@@ -13,6 +14,9 @@ public class Cars {
     private final List<Car> cars;
 
     private Cars(final List<Car> cars) {
+        if (cars.size() != new HashSet<>(cars).size()) {
+            throw new IllegalArgumentException();
+        }
         this.cars = cars;
     }
 
@@ -24,19 +28,9 @@ public class Cars {
     }
 
     private static List<Car> split(final String carNames) {
-        final List<String> splitNames = List.of(carNames.split(NAME_SPLITTER));
-        validateNameDuplicated(splitNames);
-
-        return splitNames.stream()
+        return Arrays.stream(carNames.split(NAME_SPLITTER))
                 .map(Car::withName)
                 .toList();
-    }
-
-    private static void validateNameDuplicated(final List<String> names) {
-        final Set<String> uniqueNames = new HashSet<>(names);
-        if (names.size() != uniqueNames.size()) {
-            throw new IllegalArgumentException();
-        }
     }
 
     Cars move(final MovingStrategy movingStrategy) {
